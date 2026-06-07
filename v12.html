@@ -1,0 +1,618 @@
+<meta name='viewport' content='width=device-width, initial-scale=1'/><!DOCTYPE html>
+<html lang="ms">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+    <title>Glosari · Tata Letak Padat (Butang Sebaris Kanan)</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            background: #f0f4fa;
+            font-family: 'Inter', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif;
+            padding: 24px 20px;
+        }
+        .app-container { max-width: 1400px; margin: 0 auto; }
+        .glossary-master {
+            background: white;
+            border-radius: 2rem;
+            box-shadow: 0 20px 35px -12px rgba(0,0,0,0.15);
+            overflow: hidden;
+        }
+        .header-area {
+            padding: 1.5rem 2rem 0.5rem 2rem;
+            border-bottom: 2px solid #e9eef3;
+        }
+        .header-area h1 {
+            font-size: 1.8rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #0f2b3d, #1e4a76);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            display: inline-flex;
+            align-items: center;
+            gap: 12px;
+        }
+        .sub {
+            font-size: 0.85rem;
+            color: #4a5b6e;
+            margin-top: 6px;
+            padding-left: 8px;
+            border-left: 3px solid #3b82f6;
+        }
+        .tabs-container {
+            padding: 0 2rem;
+            margin-top: 0.5rem;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .tabs {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            align-items: center;
+        }
+        .tab-btn {
+            background: #f1f5f9;
+            border-radius: 40px;
+            padding: 8px 20px;
+            font-weight: 600;
+            color: #2c3e50;
+            border: none;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background: #3b82f6;
+            color: white;
+        }
+        .add-cat-btn, .file-action-btn {
+            background: #e9f0ff;
+            color: #0755c3;
+            padding: 6px 14px;
+            font-size: 0.75rem;
+            border: none;
+            border-radius: 40px;
+            cursor: pointer;
+        }
+        .dynamic-import-panel {
+            background: #f9fbfe;
+            margin: 1rem 0 1.5rem 0;
+            padding: 1rem 1.5rem;
+            border-radius: 1.5rem;
+            border: 1px solid #e2edff;
+        }
+        textarea {
+            width: 100%;
+            height: 150px;
+            font-family: monospace;
+            font-size: 0.8rem;
+            padding: 10px;
+            border-radius: 16px;
+            border: 1px solid #cbd5e1;
+        }
+        .btn-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 12px;
+        }
+        button {
+            border: none;
+            font-weight: 600;
+            padding: 8px 18px;
+            border-radius: 40px;
+            cursor: pointer;
+            font-size: 0.8rem;
+            background: #f1f5f9;
+            color: #1f2937;
+        }
+        button.primary { background: #3b82f6; color: white; }
+        button.danger { background: #ef4444; color: white; }
+        .preview-box {
+            margin-top: 10px;
+            background: white;
+            border: 1px dashed #3b82f6;
+            border-radius: 1rem;
+            padding: 10px;
+            font-size: 0.75rem;
+            max-height: 150px;
+            overflow: auto;
+        }
+        .list-section {
+            padding: 1.5rem 2rem 2rem 2rem;
+        }
+        .list-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 1rem;
+        }
+        .counter {
+            background: #eef2ff;
+            padding: 4px 16px;
+            border-radius: 60px;
+            font-size: 0.75rem;
+            font-weight: 600;
+        }
+        .glossary-grid {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+        .entry-card {
+            background: white;
+            border: 1px solid #e4e9f2;
+            border-radius: 1.2rem;
+            padding: 0.7rem 1rem;
+            transition: 0.1s;
+        }
+        /* --- SUSUN ATUR PADAT: BUTANG SEBARIS KANAN --- */
+        .entry-row {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 12px;
+        }
+        .word-panel {
+            flex: 2;
+            min-width: 160px;
+        }
+        .english-word {
+            font-weight: 800;
+            font-size: 1.1rem;
+            color: #0f172a;
+        }
+        .pronounce-badge {
+            font-family: monospace;
+            background: #f3f4f6;
+            display: inline-block;
+            padding: 2px 10px;
+            border-radius: 40px;
+            font-size: 0.7rem;
+            margin-top: 4px;
+        }
+        .category-badge {
+            background: #e0f2fe;
+            color: #0369a1;
+            font-size: 0.65rem;
+            font-weight: 600;
+            padding: 2px 8px;
+            border-radius: 40px;
+            display: inline-block;
+            margin-left: 8px;
+        }
+        .translation-area {
+            flex: 2;
+            min-width: 170px;
+        }
+        .translation-text {
+            background: #f0fdf4;
+            padding: 6px 12px;
+            border-radius: 40px;
+            font-size: 0.9rem;
+            color: #14532d;
+            display: inline-block;
+        }
+        .hidden-translation {
+            display: none;
+        }
+        .action-group {
+            display: flex;
+            gap: 6px;
+            margin-left: auto;   /* tolak ke kanan */
+            flex-shrink: 0;
+        }
+        .icon-btn {
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 30px;
+            padding: 4px 10px;
+            font-size: 0.7rem;
+            font-weight: 500;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+        @media (max-width: 780px) {
+            .entry-row {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            .action-group {
+                margin-left: 0;
+                justify-content: flex-end;
+                margin-top: 8px;
+            }
+            .word-panel, .translation-area {
+                width: 100%;
+            }
+        }
+        .empty-msg {
+            text-align: center;
+            padding: 2rem;
+            background: #fef9e3;
+            border-radius: 1.5rem;
+            color: #b45309;
+        }
+        .footer {
+            text-align: center;
+            font-size: 0.7rem;
+            padding: 1rem;
+            color: #5b6e8c;
+            border-top: 1px solid #ecf3fa;
+        }
+        .edit-modal {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background: rgba(0,0,0,0.5);
+            backdrop-filter: blur(4px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+        .modal-card {
+            background: white;
+            max-width: 500px;
+            width: 90%;
+            border-radius: 1.8rem;
+            padding: 1.5rem;
+        }
+        .modal-card input, .modal-card select, .modal-card textarea {
+            width: 100%;
+            padding: 10px;
+            margin: 8px 0;
+            border-radius: 1rem;
+            border: 1px solid #ccc;
+        }
+        .flex-between { display: flex; justify-content: space-between; align-items: center; }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/mammoth@1.4.2/mammoth.browser.min.js"></script>
+    <script src="https://apis.google.com/js/api.js"></script>
+    <script src="https://accounts.google.com/gsi/client"></script>
+</head>
+<body>
+<div class="app-container">
+    <div class="glossary-master">
+        <div class="header-area">
+            <h1>📚 Glosari · Import Word & Google Docs</h1>
+            <div class="sub">🔊 Sebutan | 👁️ Lihat/Sembunyi | 🏷️ Kategori manual | 📄 Import .docx / Google Drive | Butang padat sebaris kanan</div>
+        </div>
+
+        <div class="tabs-container">
+            <div class="tabs" id="tabContainer">
+                <button class="tab-btn active" data-cat="__all__">📋 Semua</button>
+                <button id="addCategoryBtn" class="add-cat-btn">+ Tambah Kategori</button>
+            </div>
+        </div>
+
+        <div class="list-section">
+            <div id="dynamicImportPanel"></div>
+            <div class="list-header">
+                <span>📖 Istilah</span>
+                <span class="counter" id="itemCount">0 entri</span>
+            </div>
+            <div id="listContainer" class="glossary-grid"></div>
+        </div>
+        <div class="footer">
+            💾 Data auto-simpan | Kategori manual sepenuhnya | Import DOCX atau Google Docs (format: word (pronounce) = translation)
+        </div>
+    </div>
+</div>
+
+<script>
+    // ---------- DATA ----------
+    let glossary = [];
+    let masterCategories = [];
+    let activeCategory = "__all__";
+
+    function saveToLocal() {
+        localStorage.setItem('glosariWordImport', JSON.stringify({ glossary, categories: masterCategories }));
+    }
+
+    function loadFromLocal() {
+        const stored = localStorage.getItem('glosariWordImport');
+        if (stored) {
+            try {
+                const data = JSON.parse(stored);
+                glossary = data.glossary || [];
+                masterCategories = data.categories || [];
+                if (masterCategories.length === 0) masterCategories = ["IT", "Harian", "Umum"];
+                glossary.forEach(item => { if (!item.category || !masterCategories.includes(item.category)) item.category = masterCategories[0]; });
+                saveToLocal();
+                return;
+            } catch(e) {}
+        }
+        masterCategories = ["IT", "Harian", "Umum"];
+        glossary = [
+            { english: "How much", pronounce: "Hau mac", translation: "Berapa banyak", category: "Harian" },
+            { english: "API", pronounce: "ei-pee-ai", translation: "Antara muka pengaturcaraan aplikasi", category: "IT" }
+        ];
+        saveToLocal();
+    }
+
+    function renderTabs() {
+        const container = document.getElementById('tabContainer');
+        const addBtn = document.getElementById('addCategoryBtn');
+        document.querySelectorAll('.tab-btn:not(#addCategoryBtn)').forEach(btn => btn.remove());
+        const allTab = document.createElement('button');
+        allTab.className = `tab-btn ${activeCategory === '__all__' ? 'active' : ''}`;
+        allTab.textContent = '📋 Semua';
+        allTab.onclick = () => switchCategory('__all__');
+        container.insertBefore(allTab, addBtn);
+        masterCategories.forEach(cat => {
+            const btn = document.createElement('button');
+            btn.className = `tab-btn ${activeCategory === cat ? 'active' : ''}`;
+            btn.textContent = `🏷️ ${cat}`;
+            btn.onclick = () => switchCategory(cat);
+            container.insertBefore(btn, addBtn);
+        });
+    }
+
+    function switchCategory(cat) {
+        activeCategory = cat;
+        renderTabs();
+        renderFullView();
+    }
+
+    function renderImportPanel() {
+        const panelDiv = document.getElementById('dynamicImportPanel');
+        if (activeCategory === '__all__') {
+            panelDiv.innerHTML = `<div class="dynamic-import-panel" style="background:#fefce8;">📌 Pilih mana-mana kategori untuk import fail.</div>`;
+            return;
+        }
+        const currentCat = activeCategory;
+        panelDiv.innerHTML = `
+            <div class="dynamic-import-panel">
+                <div class="flex-between">
+                    <strong>📥 Import ke kategori: ${escapeHtml(currentCat)}</strong>
+                    <button id="deleteCategoryBtn" class="danger" style="padding:4px 12px;">🗑️ Padam Kategori Ini</button>
+                </div>
+                <div class="btn-group" style="margin-top: 12px;">
+                    <button id="uploadDocxBtn" class="primary">📄 Muat Naik Fail (.docx)</button>
+                    <button id="googleDriveBtn" class="outline">☁️ Pilih dari Google Drive</button>
+                </div>
+                <div id="filePreviewArea" class="preview-box" style="display:none;"></div>
+                <div class="btn-group">
+                    <button id="importPreviewBtn" class="primary">📥 Import ke Glosari</button>
+                    <button id="clearPreviewBtn" class="secondary">✖️ Kosongkan Preview</button>
+                    <button id="addManualBtn" class="outline">✏️ Tambah Manual</button>
+                    <button id="exportCatBtn" class="secondary">📤 Export JSON</button>
+                </div>
+            </div>
+        `;
+        let extractedLines = [];
+
+        document.getElementById('deleteCategoryBtn')?.addEventListener('click', () => deleteCategoryAndEntries(currentCat));
+        document.getElementById('addManualBtn')?.addEventListener('click', () => showAddManualDialog(currentCat));
+        document.getElementById('exportCatBtn')?.addEventListener('click', () => exportCategory(currentCat));
+        document.getElementById('uploadDocxBtn')?.addEventListener('click', () => uploadDocxFile(currentCat, (lines) => { extractedLines = lines; showPreview(lines); }));
+        document.getElementById('googleDriveBtn')?.addEventListener('click', () => initGooglePicker(currentCat, (lines) => { extractedLines = lines; showPreview(lines); }));
+        document.getElementById('importPreviewBtn')?.addEventListener('click', () => importLinesToCategory(extractedLines, currentCat));
+        document.getElementById('clearPreviewBtn')?.addEventListener('click', () => { extractedLines = []; document.getElementById('filePreviewArea').style.display = 'none'; document.getElementById('filePreviewArea').innerHTML = ''; });
+
+        function showPreview(lines) {
+            const previewDiv = document.getElementById('filePreviewArea');
+            if (!lines.length) { previewDiv.style.display = 'none'; previewDiv.innerHTML = ''; return; }
+            previewDiv.style.display = 'block';
+            previewDiv.innerHTML = `<strong>📄 Preview (${lines.length} entri ditemui):</strong><br><code>${lines.slice(0, 10).map(l => escapeHtml(l)).join('<br>')}${lines.length > 10 ? '<br>...' : ''}</code>`;
+        }
+    }
+
+    function parseLineFromText(line, category) {
+        line = line.trim();
+        if (!line) return null;
+        let eq = line.indexOf('=');
+        if (eq === -1) return null;
+        let left = line.substring(0, eq).trim();
+        let translation = line.substring(eq + 1).trim();
+        if (!left || !translation) return null;
+        let open = left.lastIndexOf('(');
+        let close = left.lastIndexOf(')');
+        let english = left, pronounce = "";
+        if (open !== -1 && close > open) {
+            english = left.substring(0, open).trim();
+            pronounce = left.substring(open + 1, close).trim();
+        }
+        if (!english) return null;
+        return { english, pronounce, translation, category };
+    }
+
+    function extractEntriesFromText(rawText, targetCategory) {
+        const lines = rawText.split(/\r?\n/);
+        const entries = [];
+        for (let line of lines) {
+            let parsed = parseLineFromText(line, targetCategory);
+            if (parsed) entries.push(parsed);
+        }
+        return entries;
+    }
+
+    async function uploadDocxFile(category, onExtracted) {
+        const input = document.createElement('input');
+        input.type = 'file';
+        input.accept = '.docx';
+        input.onchange = async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            try {
+                const arrayBuffer = await file.arrayBuffer();
+                mammoth.extractRawText({ arrayBuffer: arrayBuffer })
+                    .then(result => {
+                        const rawText = result.value;
+                        const entries = extractEntriesFromText(rawText, category);
+                        const lineStrings = entries.map(ent => `${ent.english} (${ent.pronounce || '?'}) = ${ent.translation}`);
+                        onExtracted(lineStrings);
+                    })
+                    .catch(err => { alert("Gagal parse DOCX: " + err.message); });
+            } catch(err) { alert("Ralat baca fail: " + err.message); }
+        };
+        input.click();
+    }
+
+    let googlePickerInitialized = false;
+    let pickerApiLoaded = false;
+    let authApiLoaded = false;
+    let oauthTokenClient = null;
+
+    function initGooglePicker(category, callback) {
+        if (!window.gapi || !window.google?.accounts?.oauth2) {
+            alert("Google API belum siap. Muat semula halaman atau pastikan sambungan internet.");
+            return;
+        }
+        const API_KEY = 'AIzaSyDummyKey_IsiDenganKeyAnda';
+        const CLIENT_ID = 'YOUR_CLIENT_ID.apps.googleusercontent.com';
+        const SCOPES = 'https://www.googleapis.com/auth/drive.readonly';
+        if (API_KEY === 'AIzaSyDummyKey_IsiDenganKeyAnda' || CLIENT_ID === 'YOUR_CLIENT_ID.apps.googleusercontent.com') {
+            alert("Sila masukkan Google API Key dan Client ID yang sah untuk menggunakan Google Picker.");
+            return;
+        }
+        window.gapiLoaded = () => { window.gapi.load('client:picker', () => { pickerApiLoaded = true; maybeLoadPicker(category, callback); }); };
+        window.gisLoaded = () => {
+            oauthTokenClient = google.accounts.oauth2.initTokenClient({ client_id: CLIENT_ID, scope: SCOPES, callback: '' });
+            authApiLoaded = true;
+            maybeLoadPicker(category, callback);
+        };
+        if (!window.gapiLoaded || !window.gisLoaded) setTimeout(() => initGooglePicker(category, callback), 200);
+        function maybeLoadPicker(cat, cb) {
+            if (pickerApiLoaded && authApiLoaded && oauthTokenClient) {
+                oauthTokenClient.callback = async (resp) => {
+                    if (resp.error) throw resp;
+                    const accessToken = resp.access_token;
+                    createPicker(accessToken, cat, cb);
+                };
+                oauthTokenClient.requestAccessToken({ prompt: 'consent' });
+            }
+        }
+        function createPicker(token, cat, cb) {
+            const view = new google.picker.View(google.picker.ViewId.DOCS);
+            view.setMimeTypes('application/vnd.google-apps.document');
+            const picker = new google.picker.PickerBuilder()
+                .enableFeature(google.picker.Feature.NAV_HIDDEN)
+                .setOAuthToken(token)
+                .addView(view)
+                .setDeveloperKey(API_KEY)
+                .setCallback(async (data) => {
+                    if (data.action === google.picker.Action.PICKED) {
+                        const docId = data.docs[0].id;
+                        const doc = await fetchGoogleDocContent(docId, token);
+                        if (doc) {
+                            const entries = extractEntriesFromText(doc, cat);
+                            const lines = entries.map(ent => `${ent.english} (${ent.pronounce || '?'}) = ${ent.translation}`);
+                            cb(lines);
+                        } else alert("Gagal membaca kandungan dokumen.");
+                    }
+                }).build();
+            picker.setVisible(true);
+        }
+        async function fetchGoogleDocContent(docId, token) {
+            try {
+                const res = await fetch(`https://docs.googleapis.com/v1/documents/${docId}`, { headers: { 'Authorization': `Bearer ${token}` } });
+                const data = await res.json();
+                let plainText = "";
+                if (data.body && data.body.content) {
+                    for (let elem of data.body.content) {
+                        if (elem.paragraph && elem.paragraph.elements) {
+                            for (let el of elem.paragraph.elements) plainText += el.textRun?.content || "";
+                        }
+                    }
+                }
+                return plainText;
+            } catch(e) { console.error(e); return null; }
+        }
+    }
+
+    function importLinesToCategory(linesArray, category) {
+        if (!linesArray.length) { alert("Tiada data untuk diimport."); return; }
+        let added = 0;
+        const existingMap = new Map();
+        glossary.forEach(g => existingMap.set(g.english.toLowerCase(), true));
+        for (let line of linesArray) {
+            let parsed = parseLineFromText(line, category);
+            if (parsed && !existingMap.has(parsed.english.toLowerCase())) {
+                glossary.push(parsed);
+                added++;
+                existingMap.set(parsed.english.toLowerCase(), true);
+            }
+        }
+        alert(`✅ ${added} entri baru ditambah ke kategori "${category}". Jumlah glosari: ${glossary.length}`);
+        saveToLocal();
+        renderFullView();
+    }
+
+    function exportCategory(cat) {
+        const filtered = glossary.filter(item => item.category === cat);
+        if (!filtered.length) { alert(`Tiada entri dalam kategori ${cat}`); return; }
+        const blob = new Blob([JSON.stringify(filtered, null, 2)], {type: 'application/json'});
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a'); a.href = url; a.download = `glosari_${cat}.json`; a.click(); URL.revokeObjectURL(url);
+    }
+
+    function deleteCategoryAndEntries(cat) {
+        if (!confirm(`Padam kategori "${cat}" dan SEMUA entri di dalamnya?`)) return;
+        glossary = glossary.filter(item => item.category !== cat);
+        masterCategories = masterCategories.filter(c => c !== cat);
+        if (activeCategory === cat) activeCategory = '__all__';
+        saveToLocal();
+        renderTabs();
+        renderFullView();
+    }
+
+    function showAddManualDialog(defaultCat) {
+        if (!masterCategories.length) { alert("Tiada kategori. Tambah dulu."); return; }
+        const modal = document.createElement('div'); modal.className = 'edit-modal';
+        modal.innerHTML = `<div class="modal-card"><h3>Tambah Perkataan</h3><input id="eng" placeholder="English"><input id="pron" placeholder="Sebutan"><textarea id="trans" placeholder="Terjemahan"></textarea><select id="cat">${masterCategories.map(c => `<option value="${c}" ${c===defaultCat?'selected':''}>${c}</option>`).join('')}</select><div class="modal-actions"><button id="cancelBtn">Batal</button><button id="saveBtn" class="primary">Simpan</button></div></div>`;
+        document.body.appendChild(modal);
+        document.getElementById('saveBtn').onclick = () => {
+            const eng = document.getElementById('eng').value.trim();
+            const pronounce = document.getElementById('pron').value.trim();
+            const translation = document.getElementById('trans').value.trim();
+            const category = document.getElementById('cat').value;
+            if (!eng || !translation) { alert("English & Terjemahan wajib"); return; }
+            if (glossary.some(g => g.english.toLowerCase() === eng.toLowerCase())) { alert("Perkataan sudah wujud!"); return; }
+            glossary.push({ english: eng, pronounce, translation, category });
+            saveToLocal(); renderFullView(); modal.remove();
+        }; document.getElementById('cancelBtn').onclick = () => modal.remove();
+    }
+
+    function renderGlossaryList() {
+        const container = document.getElementById('listContainer');
+        const countSpan = document.getElementById('itemCount');
+        let filtered = (activeCategory === '__all__') ? [...glossary] : glossary.filter(item => item.category === activeCategory);
+        if (!filtered.length) { container.innerHTML = `<div class="empty-msg">📭 Tiada entri. Import fail atau tambah manual.</div>`; countSpan.innerText = `0 entri`; return; }
+        countSpan.innerText = `${filtered.length} entri (daripada ${glossary.length} total)`;
+        let html = '';
+        filtered.forEach((item, idx) => {
+            const originalIdx = glossary.findIndex(g => g === item);
+            const transId = `trans-${originalIdx}`;
+            html += `<div class="entry-card"><div class="entry-row"><div class="word-panel"><div class="english-word">${escapeHtml(item.english)}<span class="category-badge">🏷️ ${escapeHtml(item.category)}</span></div>${item.pronounce ? `<div class="pronounce-badge">🗣️ ${escapeHtml(item.pronounce)}</div>` : ''}</div><div class="translation-area"><div id="${transId}" class="translation-text hidden-translation">${escapeHtml(item.translation)}</div></div><div class="action-group"><button class="icon-btn speak" data-word="${escapeHtml(item.english)}">🔊 Sebut</button><button class="icon-btn toggle" data-target="${transId}">👁️ Lihat</button><button class="icon-btn edit" data-idx="${originalIdx}">✏️ Edit</button><button class="icon-btn delete" data-idx="${originalIdx}">🗑️ Padam</button></div></div></div>`;
+        });
+        container.innerHTML = html;
+        document.querySelectorAll('.speak').forEach(btn => btn.addEventListener('click', () => speakEnglish(btn.getAttribute('data-word'))));
+        document.querySelectorAll('.toggle').forEach(btn => btn.addEventListener('click', (e) => { const div = document.getElementById(btn.getAttribute('data-target')); if (div) div.classList.toggle('hidden-translation'); }));
+        document.querySelectorAll('.edit').forEach(btn => btn.addEventListener('click', (e) => editEntry(parseInt(btn.getAttribute('data-idx')))));
+        document.querySelectorAll('.delete').forEach(btn => btn.addEventListener('click', (e) => { if (confirm("Padam?")) { glossary.splice(parseInt(btn.getAttribute('data-idx')), 1); saveToLocal(); renderFullView(); } }));
+    }
+
+    function editEntry(idx) {
+        const e = glossary[idx];
+        const modal = document.createElement('div'); modal.className = 'edit-modal';
+        modal.innerHTML = `<div class="modal-card"><h3>Edit</h3><input id="eng" value="${escapeHtml(e.english)}"><input id="pron" value="${escapeHtml(e.pronounce)}"><textarea id="trans">${escapeHtml(e.translation)}</textarea><select id="cat">${masterCategories.map(c => `<option value="${c}" ${c===e.category?'selected':''}>${c}</option>`).join('')}</select><div class="modal-actions"><button id="cancelBtn">Batal</button><button id="saveBtn">Simpan</button></div></div>`;
+        document.body.appendChild(modal);
+        document.getElementById('saveBtn').onclick = () => {
+            const english = document.getElementById('eng').value.trim(), pronounce = document.getElementById('pron').value.trim(), translation = document.getElementById('trans').value.trim(), category = document.getElementById('cat').value;
+            if (!english || !translation) return alert("Lengkapkan data");
+            glossary[idx] = { english, pronounce, translation, category };
+            saveToLocal(); renderFullView(); modal.remove();
+        }; document.getElementById('cancelBtn').onclick = () => modal.remove();
+    }
+
+    function speakEnglish(word) { if (window.speechSynthesis) { window.speechSynthesis.cancel(); const u = new SpeechSynthesisUtterance(word); u.lang = 'en-US'; window.speechSynthesis.speak(u); } else alert("TTS tidak disokong"); }
+    function escapeHtml(str) { return str ? str.replace(/[&<>]/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;'})[m]) : ''; }
+    function renderFullView() { renderImportPanel(); renderGlossaryList(); }
+    function addNewCategory() { let newCat = prompt("Nama kategori baru:"); if (newCat && newCat.trim() && !masterCategories.includes(newCat.trim())) { masterCategories.push(newCat.trim()); saveToLocal(); renderTabs(); if (activeCategory !== '__all__') activeCategory = newCat.trim(); renderFullView(); } else alert("Kategori sudah wujud atau tidak sah."); }
+
+    loadFromLocal(); renderTabs(); renderFullView();
+    document.getElementById('addCategoryBtn').onclick = addNewCategory;
+    window.gapiLoaded?.(); window.gisLoaded?.();
+</script>
+</body>
+</html>
